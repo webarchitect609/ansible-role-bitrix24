@@ -1,0 +1,34 @@
+---
+- name: "Refresh apt sources list"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: "Ensure dependencies are installed"
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - "gpgv"
+      - "gnupg"
+      - "apt-transport-https"
+
+- name: "Add GPG key(in a weird manner)"
+  ansible.builtin.copy:
+    src: "files/bitrix24.asc"
+    dest: "/etc/apt/trusted.gpg.d/bitrix24.asc"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Add repository"
+  ansible.builtin.apt_repository:
+    repo: "{{ bitrix24_deb_source }}"
+    filename: "bitrix24"
+    state: present
+
+- name: "Install Bitrix24"
+  ansible.builtin.apt:
+    name: "{{ bitrix24_package }}"
+    state: present

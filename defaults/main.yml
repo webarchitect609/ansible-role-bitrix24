@@ -1,0 +1,6 @@
+---
+# repository URL
+bitrix24_deb_source: "deb [arch=amd64] https://repo.bitrix.info/desktop/ stable main"
+
+# package name
+bitrix24_package: bitrix24
